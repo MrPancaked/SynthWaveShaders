@@ -1,8 +1,12 @@
-Shader "Unlit/TestShader"
+Shader "Unlit/SynthWavePlane"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Heightmap ("Texture", 2D) = "black" {}
+        _HeightScale ("HeightScale", Float) = 1
+        _LineWidth ("LineWidth", Float) = 0.01
+        _LineFrequency ("LineFrequency", float) = 20
     }
     SubShader
     {
@@ -33,11 +37,18 @@ Shader "Unlit/TestShader"
             };
 
             sampler2D _MainTex;
+            sampler2D _Heightmap;
             float4 _MainTex_ST;
+            float _HeightScale;
+            float _LineWidth;
+            float _LineFrequency;
 
             v2f vert (appdata v)
             {
                 v2f o;
+                float4 uvHeightmap = float4(v.uv, 0, 0);
+                float vertHeigt = tex2Dlod(_Heightmap, uvHeightmap).x * _HeightScale;
+                v.vertex.y += vertHeigt;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
@@ -47,7 +58,21 @@ Shader "Unlit/TestShader"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                float4 col = tex2D(_MainTex, i.uv);
+                float lineInterval = 1/_LineFrequency;
+                float halfLineWidth = _LineWidth / 2;
+                float Xmod = fmod(i.uv.x, lineInterval);
+                float Ymod = fmod(i.uv.y, lineInterval);
+                if ((Xmod >= lineInterval - halfLineWidth || Xmod <=  halfLineWidth) ||
+                    (Ymod >= lineInterval - halfLineWidth || Ymod <=  halfLineWidth))
+                {
+                    col = float4(0,1,1,1);
+                }
+                else
+                {
+                    col = float4(0,0,0,1);
+                }
+                
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
