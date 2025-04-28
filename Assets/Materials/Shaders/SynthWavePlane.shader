@@ -5,6 +5,7 @@ Shader "Unlit/SynthWavePlane"
         _MainTex ("Texture", 2D) = "white" {}
         _Heightmap ("Texture", 2D) = "black" {}
         _HeightScale ("HeightScale", Float) = 1
+        _LineColor ("LineColor", Color) = (0,1,1,1)
         _LineWidth ("LineWidth", Float) = 0.01
         _LineFrequency ("LineFrequency", float) = 20
     }
@@ -40,6 +41,7 @@ Shader "Unlit/SynthWavePlane"
             sampler2D _Heightmap;
             float4 _MainTex_ST;
             float _HeightScale;
+            float4 _LineColor;
             float _LineWidth;
             float _LineFrequency;
 
@@ -66,11 +68,12 @@ Shader "Unlit/SynthWavePlane"
                 if ((Xmod >= lineInterval - halfLineWidth || Xmod <=  halfLineWidth) ||
                     (Ymod >= lineInterval - halfLineWidth || Ymod <=  halfLineWidth))
                 {
-                    col = float4(0,1,1,1);
+                    col = _LineColor;
                 }
                 else
                 {
                     col = float4(0,0,0,1);
+                    //col = tex2D(_MainTex, i.uv);
                 }
                 
                 // apply fog
