@@ -36,7 +36,6 @@ Shader "CustomRenderTexture/CustomRenderTextureShader"
                 {
                     color = float4(1,0,0,1);
                 }
-                
 
                 // TODO: Replace this by actual code!
                 //uint2 p = uv.xy * 256;

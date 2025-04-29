@@ -1,4 +1,4 @@
-Shader "Unlit/SynthWavePlane"
+Shader "Unlit/SynthWaveMesh"
 {
     Properties
     {
@@ -8,7 +8,6 @@ Shader "Unlit/SynthWavePlane"
         _LineColor ("LineColor", Color) = (0,1,1,1)
         _LineWidth ("LineWidth", Float) = 0.01
         _LineFrequency ("LineFrequency", float) = 20
-        _ScrollSpeed ("ScrollSpeed", float) = 1
     }
     SubShader
     {
@@ -45,7 +44,6 @@ Shader "Unlit/SynthWavePlane"
             float4 _LineColor;
             float _LineWidth;
             float _LineFrequency;
-            float _ScrollSpeed;
 
             v2f vert (appdata v)
             {
@@ -65,11 +63,10 @@ Shader "Unlit/SynthWavePlane"
                 float4 col = tex2D(_MainTex, i.uv);
                 float lineInterval = 1/_LineFrequency;
                 float halfLineWidth = _LineWidth / 2;
-                float fracY = frac(i.uv.y - _ScrollSpeed * _Time.y);
-                float modX = fmod(i.uv.x, lineInterval);
-                float modY = fmod(fracY, lineInterval);
-                if ((modX >= lineInterval - halfLineWidth || modX <=  halfLineWidth) ||
-                    (modY >= lineInterval - halfLineWidth || modY <=  halfLineWidth))
+                float Xmod = fmod(i.uv.x, lineInterval);
+                float Ymod = fmod(i.uv.y, lineInterval);
+                if ((Xmod >= lineInterval - halfLineWidth || Xmod <=  halfLineWidth) ||
+                    (Ymod >= lineInterval - halfLineWidth || Ymod <=  halfLineWidth))
                 {
                     col = _LineColor;
                 }
