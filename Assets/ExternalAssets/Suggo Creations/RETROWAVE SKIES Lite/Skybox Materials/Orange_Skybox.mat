@@ -117,7 +117,7 @@ Material:
     - _StencilWriteMaskMV: 40
     - _SunMaskSize: 0.05
     - _SunMaskSpherize: 14
-    - _SunSize: 0.5
+    - _SunSize: 0
     - _SurfaceType: 0
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
