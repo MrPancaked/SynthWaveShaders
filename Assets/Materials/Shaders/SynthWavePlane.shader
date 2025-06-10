@@ -37,11 +37,7 @@ Shader "Unlit/SynthWavePlane"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
-
-            sampler2D _MainTex;
-            sampler2D _Heightmap;
-            float4 _MainTex_ST;
-            float _HeightScale;
+            
             float4 _LineColor;
             float _LineWidth;
             float _LineFrequency;
@@ -50,34 +46,21 @@ Shader "Unlit/SynthWavePlane"
             v2f vert (appdata v)
             {
                 v2f o;
-                float4 uvHeightmap = float4(v.uv, 0, 0);
-                float vertHeigt = tex2Dlod(_Heightmap, uvHeightmap).x * _HeightScale;
-                v.vertex.y += vertHeigt;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                float4 col = tex2D(_MainTex, i.uv);
-                float lineInterval = 1/_LineFrequency;
-                float halfLineWidth = _LineWidth / 2;
-                float fracY = frac(i.uv.y - _ScrollSpeed * _Time.y);
-                float modX = fmod(i.uv.x, lineInterval);
-                float modY = fmod(fracY, lineInterval);
-                if ((modX >= lineInterval - halfLineWidth || modX <=  halfLineWidth) ||
-                    (modY >= lineInterval - halfLineWidth || modY <=  halfLineWidth))
-                {
-                    col = _LineColor;
-                }
-                else
-                {
-                    col = float4(0,0,0,1);
-                    //col = tex2D(_MainTex, i.uv);
-                }
+                float2 gridUV = i.uv * _LineFrequency;
+                gridUV.y += _Time.y * _ScrollSpeed;
+                float2 gridLine = abs(frac(gridUV - 0.5) - 0.5) / (fwidth(gridUV) * _LineWidth);
+                float lineMask = 1.0 - min(min(gridLine.x, gridLine.y), 1.0);
+                float smoothLine = smoothstep(0.0, 1.0, lineMask);
+
+                fixed4 col = lerp(float4(0,0,0,1), _LineColor, smoothLine);
                 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
