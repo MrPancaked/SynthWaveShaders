@@ -50,7 +50,17 @@ Shader "Unlit/SunShader"
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                //o.vertex = UnityObjectToClipPos(v.vertex);
+                float4 origin = float4(0,0,0,1);
+                float4 world_origin = mul(UNITY_MATRIX_M, origin);
+                float4 view_origin = mul(UNITY_MATRIX_V, world_origin);
+                float4 world_to_view_translation = view_origin - world_origin;
+
+                float4 world_pos = mul(UNITY_MATRIX_M, v.vertex);
+                float4 view_pos = world_pos + world_to_view_translation;
+                float4 clip_pos = mul(UNITY_MATRIX_P, view_pos);
+
+                o.vertex = clip_pos;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;

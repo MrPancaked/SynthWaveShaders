@@ -62,7 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
-        m_Texture: {fileID: 2800000, guid: a1916bcdbe5043e45a31ccdf5410bfcb, type: 3}
+        m_Texture: {fileID: 2800000, guid: fbf610c3dd1e8ea4692da470f212914d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -117,7 +117,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HeightScale: 113.42
+    - _HeightScale: 115.2
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
