@@ -72,7 +72,7 @@ Shader "Unlit/SunShader"
                 float4 col = black;
                 float distanceToCentre = sqrt(pow(i.uv.x - 0.5, 2) + pow(i.uv.y - 0.5, 2));
                 
-                if (pow(sin((i.uv.y + (_Time.y * _LineSpeed)) * _LineFrequency * UNITY_PI), 2) <= _LineThickness * pow((-i.uv.y + 1), 6) && i.uv.y < 0.6)
+                if (pow(sin((i.uv.y + _Time.y * _LineSpeed) * _LineFrequency * UNITY_PI), 2) <= pow((-i.uv.y + 1), _LineThickness) && i.uv.y < 0.6)
                 {
                     discard;
                 }
