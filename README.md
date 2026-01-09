@@ -1,5 +1,6 @@
 # Synthwave Scene
-This moving scene was made with unity, using HLSL and shader Graph. The project is not interactive so only clone the repo if you would like to play around with the HLSL code I wrote
+This moving scene was made with unity, using HLSL and shader Graph. The project is not interactive so only clone the repo if you would like to play around with the HLSL code I wrote.
+This was a solo school project where I learned more about shaders (shader programming in HLSL and shader graphs) in unity. It was really cool to see my math knowledge turned into a pretty scene. 
 
 Most useful code and some graphs are located under Assets/Materials/Shaders
 Other code that I used for the Synthwave mountain generation and instantiating the long rails on the side of the road, is located under Assets/Scripts.
